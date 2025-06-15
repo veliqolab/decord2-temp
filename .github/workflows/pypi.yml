@@ -17,19 +17,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            pybuilds: cp3{10,11,12,13}-manylinux_x86_64
+            pybuilds: cp3{10,11,12,13,13t}-manylinux_x86_64
             arch: x86_64
             id: linux_x86_64
           - os: ubuntu-24.04-arm
-            pybuilds: cp3{10,11,12,13}-manylinux_aarch64
+            pybuilds: cp3{10,11,12,13,13t}-manylinux_aarch64
             arch: aarch64
             id: linux_aarch64
           - os: macos-13
-            pybuilds: cp3{10,11,12,13}-macosx_x86_64
+            pybuilds: cp3{10,11,12,13,13t}-macosx_x86_64
             arch: x86_64
             id: macos_x86
           - os: macos-latest
-            pybuilds: cp3{10,11,12,13}-macosx_arm64
+            pybuilds: cp3{10,11,12,13,13t}-macosx_arm64
             arch: arm64
             id: macos_arm64
 
@@ -96,6 +96,29 @@ jobs:
           CIBW_TEST_COMMAND: python -m pytest {project}/tests/python/unittests -v
           CIBW_TEST_REQUIRES: pytest numpy nose simpleaudio
 
+      - name: Rename wheels
+        shell: bash
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -e
+          cd ./wheelhouse
+          echo "--- Original wheels ---"
+          ls -1
+          echo "--- Renaming wheels for CUDA version ${CUDA_TAG} ---"
+          for wheel in ./*.whl; do
+              [[ -e "$wheel" ]] || continue
+              base=$(basename "$wheel")
+              version=$(echo "$base" | grep -oP '(?<=decord2-)[^-]+')
+              pyver=$(echo "$base" | grep -oP 'cp3[0-9]+-cp3[0-9]+')
+              platform_tag="manylinux_2_28_${ARCH}"
+              new_name="decord2-${version}-${pyver}-${platform_tag}.whl"
+              echo "Renaming '$base' → '$new_name'"
+              mv "$wheel" "$new_name"
+          done
+          echo "--- Renamed wheels ---"
+          ls -1
+
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.id }}
@@ -110,12 +133,12 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: x86_64
-            pybuilds: "cp3{10,11,12}-manylinux_x86_64"
+            pybuilds: "cp3{10,11,12,13,13t}-manylinux_x86_64"
             cuda_arch: "80;86;89;90;100;120"
             id: linux_x86_64_cuda
           - os: ubuntu-24.04-arm
             arch: aarch64
-            pybuilds: "cp3{10,11,12}-manylinux_aarch64"
+            pybuilds: "cp3{10,11,12,13,13t}-manylinux_aarch64"
             cuda_arch: "80;86;87;89;90;100;101;120"
             id: linux_aarch64_cuda
 
@@ -213,7 +236,7 @@ jobs:
             PKG_CONFIG_PATH=/tmp/vendor/lib/pkgconfig
           CUDA_TAG: "cu128"
 
-      - name: Rename wheels for CUDA version (conditional)
+      - name: Rename wheels for CUDA version
         shell: bash
         env:
           CUDA_TAG: "cu128"
