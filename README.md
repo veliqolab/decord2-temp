@@ -39,13 +39,13 @@ Decord is good at handling random access patterns, which is rather common during
 Simply use
 
 ```bash
-pip install decord
+pip install decord2
 ```
 
 Supported platforms:
 
 - [x] Linux
-- [x] Mac OS >= 10.12, python>=3.5
+- [x] Mac OS >= 10.13, python>=3.10
 - [x] Windows
 
 **Note that only CPU versions are provided with PYPI now. Please build from source to enable GPU acclerator.**
@@ -58,8 +58,6 @@ Supported platforms:
 Install the system packages for building the shared library, for Debian/Ubuntu users, run:
 
 ```bash
-# official PPA comes with ffmpeg 2.8, which lacks tons of features, we use ffmpeg 4.0 here
-sudo add-apt-repository ppa:jonathonf/ffmpeg-4 # for ubuntu20.04 official PPA is already version 4.2, you may skip this step
 sudo apt-get update
 sudo apt-get install -y build-essential python3-dev python3-setuptools make cmake
 sudo apt-get install -y ffmpeg libavcodec-dev libavfilter-dev libavformat-dev libavutil-dev
@@ -126,13 +124,13 @@ brew install cmake ffmpeg
 Clone the repo recursively(important)
 
 ```bash
-git clone --recursive https://github.com/dmlc/decord
+git clone --recursive https://github.com/johnnynunez/decord2
 ```
 
 Then go to root directory build shared library:
 
 ```bash
-cd decord
+cd decord2
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make
@@ -161,8 +159,8 @@ When dependencies are ready, open command line prompt:
 
 ```bash
 cd your-workspace
-git clone --recursive https://github.com/dmlc/decord
-cd decord
+git clone --recursive https://github.com/johnnynunez/decord2
+cd decord2
 mkdir build
 cd build
 cmake -DCMAKE_CXX_FLAGS="/DDECORD_EXPORTS" -DCMAKE_CONFIGURATION_TYPES="Release" -G "Visual Studio 15 2017 Win64" ..
@@ -171,7 +169,7 @@ cmake -DCMAKE_CXX_FLAGS="/DDECORD_EXPORTS" -DCMAKE_CONFIGURATION_TYPES="Release"
 
 ## Usage
 
-Decord provides minimal API set for bootstraping. You can also check out jupyter notebook [examples](examples/).
+Decord2 provides minimal API set for bootstraping. You can also check out jupyter notebook [examples](examples/).
 
 ### VideoReader
 
@@ -281,7 +279,7 @@ audio2, video2 = av.get_batch([1,3,5])
 
 ## Bridges for deep learning frameworks:
 
-It's important to have a bridge from decord to popular deep learning frameworks for training/inference
+It's important to have a bridge from decord2 to popular deep learning frameworks for training/inference
 
 -   Apache MXNet (Done)
 -   Pytorch (Done)
