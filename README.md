@@ -1,21 +1,22 @@
-# Decord
+# Decord2
 
-![CI Build](https://github.com/dmlc/decord/workflows/C/C++%20CI/badge.svg?branch=master)
-![Release Build](https://github.com/dmlc/decord/workflows/Publish%20to%20PYPI/badge.svg?branch=master)
-[![PyPI](https://img.shields.io/pypi/v/decord.svg)](https://pypi.python.org/pypi/decord)
-[![Downloads](http://pepy.tech/badge/decord)](http://pepy.tech/project/decord)
+![CI Build](https://github.com/johnnynunez/decord2/workflows/C/C++%20CI/badge.svg?branch=master)
+![Release Build](https://github.com/johnnynunez/decord2/workflows/Publish%20to%20PYPI/badge.svg?branch=master)
+[![PyPI](https://img.shields.io/pypi/v/decord.svg)](https://pypi.python.org/pypi/decord2)
+[![Downloads](http://pepy.tech/badge/decord2)](http://pepy.tech/project/decord2)
 
 ![symbol](docs/symbol.png)
 
-`Decord` is a reverse procedure of `Record`. It provides convenient video slicing methods based on a thin wrapper on top of hardware accelerated video decoders, e.g.
+`Decord2` is a reverse procedure of `Record`. It provides convenient video slicing methods based on a thin wrapper on top of hardware accelerated video decoders, e.g.
 
 -   FFMPEG/LibAV(Done)
 -   Nvidia Codecs(Done)
 -   Intel Codecs
 
-`Decord` was designed to handle awkward video shuffling experience in order to provide smooth experiences similar to random image loader for deep learning.
+## Compatible with FFMPEG7 and CUDA 12.9.1
+`Decord2` was designed to handle awkward video shuffling experience in order to provide smooth experiences similar to random image loader for deep learning.
 
-`Decord` is also able to decode audio from both video and audio files. One can slice video and audio together to get a synchronized result; hence providing a one-stop solution for both video and audio decoding.
+`Decord2` is also able to decode audio from both video and audio files. One can slice video and audio together to get a synchronized result; hence providing a one-stop solution for both video and audio decoding.
 
 Table of contents
 =================
