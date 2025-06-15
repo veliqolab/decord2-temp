@@ -21,12 +21,14 @@ maintainers = [
 ]
 
 [tool.setuptools.dynamic]
-version = {attr = "decord.__version__"}
+version = {attr = "decord.version.__version__"}
 
 [tool.cibuildwheel]
 archs = "auto64"
 build-verbosity = 1
 skip = ""
+# Enable free-threaded support
+enable = ["cpython-freethreading"]
 
 manylinux-x86_64-image = "quay.io/pypa/manylinux_2_28_x86_64"
 manylinux-aarch64-image = "quay.io/pypa/manylinux_2_28_aarch64"
