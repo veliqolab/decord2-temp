@@ -234,12 +234,12 @@ jobs:
             PATH=/usr/local/cuda-13.0/bin:$PATH
             LD_LIBRARY_PATH=/usr/local/cuda-13.0/lib64:/tmp/vendor/lib:$LD_LIBRARY_PATH
             PKG_CONFIG_PATH=/tmp/vendor/lib/pkgconfig
-          CUDA_TAG: "cu128"
+          CUDA_TAG: "cu130"
 
       - name: Rename wheels for CUDA version
         shell: bash
         env:
-          CUDA_TAG: "cu128"
+          CUDA_TAG: "cu130"
           ARCH: ${{ matrix.arch }}
         run: |
           set -e
