@@ -554,9 +554,15 @@ double VideoReader::GetRotation() const {
     if (rotate && *rotate->value && strcmp(rotate->value, "0"))
         theta = atof(rotate->value);
 
-    uint8_t* displaymatrix = av_stream_get_side_data(active_st, AV_PKT_DATA_DISPLAYMATRIX, NULL);
+    uint8_t* displaymatrix = nullptr;
+    for (int i = 0; i < active_st->nb_side_data; ++i) {
+        if (active_st->side_data[i].type == AV_PKT_DATA_DISPLAYMATRIX) {
+            displaymatrix = active_st->side_data[i].data;
+            break;
+        }
+    }
     if (displaymatrix && !theta)
-        theta = -av_display_rotation_get((int32_t*) displaymatrix);
+        theta = -av_display_rotation_get(reinterpret_cast<int32_t*>(displaymatrix));
 
     theta = std::fmod(theta, 360);
     if(theta < 0) theta += 360;
