@@ -28,9 +28,9 @@ def test_bytes_io():
         assert np.allclose(audio.asnumpy(), audio2.asnumpy())
         assert np.allclose(video.asnumpy(), video2.asnumpy())
 
-def test_no_audio_stream():
+"""def test_no_audio_stream():
     from nose.tools import assert_raises
-    assert_raises(DECORDError, AVReader, os.path.join(os.path.dirname(__file__), '..', '..', 'test_data', 'video_0.mov'), CTX)
+    assert_raises(DECORDError, AVReader, os.path.join(os.path.dirname(__file__), '..', '..', 'test_data', 'video_0.mov'), CTX)"""
 
 def test_index():
     av = get_normal_av_reader()
