@@ -148,7 +148,6 @@ namespace decord {
         if (codecOpenRet < 0) {
             char errstr[200];
             av_strerror(codecOpenRet, errstr, 200);
-            avcodec_close(pCodecContext);
             avcodec_free_context(&pCodecContext);
             avformat_close_input(&pFormatContext);
             LOG(FATAL) << "ERROR open codec through avcodec_open2: " << errstr;
@@ -210,7 +209,6 @@ namespace decord {
         // clean up
         av_frame_free(&pFrame);
         av_packet_free(&pPacket);
-        avcodec_close(pCodecContext);
         swr_close(swr);
         swr_free(&swr);
         avcodec_free_context(&pCodecContext);
