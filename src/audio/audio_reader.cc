@@ -209,7 +209,6 @@ namespace decord {
         // clean up
         av_frame_free(&pFrame);
         av_packet_free(&pPacket);
-        avcodec_free_context(&pCodecContext);
         swr_close(swr);
         swr_free(&swr);
         avcodec_free_context(&pCodecContext);
