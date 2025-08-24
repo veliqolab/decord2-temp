@@ -96,29 +96,6 @@ jobs:
           CIBW_TEST_COMMAND: python -m pytest {project}/tests/python/unittests -v
           CIBW_TEST_REQUIRES: pytest numpy nose simpleaudio
 
-      - name: Rename wheels
-        shell: bash
-        env:
-          ARCH: ${{ matrix.arch }}
-        run: |
-          set -e
-          cd ./wheelhouse
-          echo "--- Original wheels ---"
-          ls -1
-          echo "--- Renaming wheels for CUDA version ${CUDA_TAG} ---"
-          for wheel in ./*.whl; do
-              [[ -e "$wheel" ]] || continue
-              base=$(basename "$wheel")
-              version=$(echo "$base" | grep -oP '(?<=decord2-)[^-]+')
-              pyver=$(echo "$base" | grep -oP 'cp3[0-9]+-cp3[0-9]+')
-              platform_tag="manylinux_2_28_${ARCH}"
-              new_name="decord2-${version}-${pyver}-${platform_tag}.whl"
-              echo "Renaming '$base' → '$new_name'"
-              mv "$wheel" "$new_name"
-          done
-          echo "--- Renamed wheels ---"
-          ls -1
-
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.id }}
