@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <decord/runtime/ndarray.h>
 #include <decord/runtime/c_runtime_api.h>
+#include <libavutil/display.h>
 
 namespace decord {
 
@@ -548,24 +549,25 @@ double VideoReader::GetRotation() const {
     CHECK(actv_stm_idx_ >= 0);
     CHECK(static_cast<unsigned int>(actv_stm_idx_) < fmt_ctx_->nb_streams);
     AVStream *active_st = fmt_ctx_->streams[actv_stm_idx_];
-    AVDictionaryEntry *rotate = av_dict_get(active_st->metadata, "rotate", NULL, 0);
-
     double theta = 0;
-    if (rotate && *rotate->value && strcmp(rotate->value, "0"))
+#if LIBAVFORMAT_VERSION_MAJOR >= 60
+    AVDictionaryEntry *rotate = av_dict_get(active_st->metadata, "rotate", NULL, 0);
+    if (rotate && rotate->value && strcmp(rotate->value, "0")) {
         theta = atof(rotate->value);
-
-    uint8_t* displaymatrix = nullptr;
-    for (int i = 0; i < active_st->nb_side_data; ++i) {
-        if (active_st->side_data[i].type == AV_PKT_DATA_DISPLAYMATRIX) {
-            displaymatrix = active_st->side_data[i].data;
-            break;
+    }
+#else
+    uint8_t *displaymatrix = av_stream_get_side_data(active_st, AV_PKT_DATA_DISPLAYMATRIX, NULL);
+    if (displaymatrix) {
+        theta = -av_display_rotation_get(reinterpret_cast<int32_t *>(displaymatrix));
+    } else {
+        AVDictionaryEntry *rotate = av_dict_get(active_st->metadata, "rotate", NULL, 0);
+        if (rotate && rotate->value && strcmp(rotate->value, "0")) {
+            theta = atof(rotate->value);
         }
     }
-    if (displaymatrix && !theta)
-        theta = -av_display_rotation_get(reinterpret_cast<int32_t*>(displaymatrix));
-
+#endif
     theta = std::fmod(theta, 360);
-    if(theta < 0) theta += 360;
+    if (theta < 0) theta += 360;
 
     return theta;
 }
