@@ -63,11 +63,10 @@ void FFMPEGFilterGraph::Init(std::string filters_descr, AVCodecContext *dec_ctx)
     // LOG(INFO) << "create filter src";
 
     /* buffer video sink: to terminate the filter chain. */
-        AVBufferSinkParams *buffersink_params = av_buffersink_params_alloc();
-        buffersink_params->pixel_fmts = pix_fmts;
-        CHECK_GE(avfilter_graph_create_filter(&buffersink_ctx_, buffersink, "out",
-                NULL, buffersink_params, filter_graph_.get()), 0) << "Cannot create buffer sink";
-        av_free(buffersink_params);
+            CHECK_GE(avfilter_graph_create_filter(&buffersink_ctx_, buffersink, "out",
+                    NULL, NULL, filter_graph_.get()), 0) << "Cannot create buffer sink";
+            CHECK_GE(av_opt_set_int_list(buffersink_ctx_, "pix_fmts", pix_fmts,
+                                         AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN), 0) << "Cannot set output pixel format";
     // LOG(INFO) << "create filter sink";
 
     // LOG(INFO) << "create filter set opt";
