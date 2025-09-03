@@ -302,3 +302,4 @@ decord.bridge.set_bridge('tensorflow')
 # or back to decord native format
 decord.bridge.set_bridge('native')
 ```
+# decode2
